@@ -2032,6 +2032,17 @@ status_t ACodec::configureCodec(
         }
 
         if (encoder) {
+            // WARNING: EXTREMELY DIRTY HACK
+	    // On some device, e.g. osborn, the hardware encoder always throws
+	    // errors when COLOR_FormatSurface (0x7F000789) is used.
+	    // Here we simply replace it with OMX_QCOM_COLOR_FormatYUV420PackedSemiPlanar32m (0x7fa30c04)
+            int32_t requestedColorFormat = OMX_COLOR_FormatUnused;
+	    if (msg->findInt32("color-format", &requestedColorFormat) &&
+                    requestedColorFormat == 0x7F000789) {
+                ALOGW("Dirty hack: Replacing FormatSurface");
+                msg->setInt32("color-format", 0x7fa30c04);
+            }
+            // Dirty hack end.
             err = setupVideoEncoder(mime, msg, outputFormat, inputFormat);
         } else {
             err = setupVideoDecoder(mime, msg, haveNativeWindow, usingSwRenderer, outputFormat);
