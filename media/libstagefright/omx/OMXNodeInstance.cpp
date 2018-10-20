@@ -1512,7 +1512,8 @@ status_t OMXNodeInstance::setInputSurface(
         return UNKNOWN_ERROR;
     }
 
-    if (def.format.video.eColorFormat != OMX_COLOR_FormatAndroidOpaque) {
+    if (def.format.video.eColorFormat != OMX_COLOR_FormatAndroidOpaque
+            && def.format.video.eColorFormat != OMX_QCOM_COLOR_FormatYUV420PackedSemiPlanar32m) {
         CLOGW("createInputSurface requires COLOR_FormatSurface "
                 "(AndroidOpaque) color format instead of %s(%#x)",
                 asString(def.format.video.eColorFormat), def.format.video.eColorFormat);
