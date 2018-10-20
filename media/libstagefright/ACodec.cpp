@@ -2033,14 +2033,14 @@ status_t ACodec::configureCodec(
 
         if (encoder) {
             // WARNING: EXTREMELY DIRTY HACK
-	    // On some device, e.g. osborn, the hardware encoder always throws
-	    // errors when COLOR_FormatSurface (0x7F000789) is used.
-	    // Here we simply replace it with OMX_QCOM_COLOR_FormatYUV420PackedSemiPlanar32m (0x7fa30c04)
+            // On some device, e.g. osborn, the hardware encoder always throws
+            // errors when OMX_COLOR_FormatAndroidOpaque (0x7F000789) is used.
+            // Here we simply replace it with OMX_QCOM_COLOR_FormatYUV420PackedSemiPlanar32m (0x7fa30c04)
             int32_t requestedColorFormat = OMX_COLOR_FormatUnused;
-	    if (msg->findInt32("color-format", &requestedColorFormat) &&
-                    requestedColorFormat == 0x7F000789) {
+            if (msg->findInt32("color-format", &requestedColorFormat) &&
+                    requestedColorFormat == OMX_COLOR_FormatAndroidOpaque) {
                 ALOGW("Dirty hack: Replacing FormatSurface");
-                msg->setInt32("color-format", 0x7fa30c04);
+                msg->setInt32("color-format", OMX_QCOM_COLOR_FormatYUV420PackedSemiPlanar32m);
             }
             // Dirty hack end.
             err = setupVideoEncoder(mime, msg, outputFormat, inputFormat);
