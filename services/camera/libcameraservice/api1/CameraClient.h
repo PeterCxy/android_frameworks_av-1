@@ -180,7 +180,8 @@ private:
     // is found to be disabled. It returns true if mLock is grabbed.
     bool                    lockIfMessageWanted(int32_t msgType);
 
-    int                     mBurstCnt;
+    bool                 mLongshotEnabled;
+    int                  mBurstCnt;
 };
 
 }
